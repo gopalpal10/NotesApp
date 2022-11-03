@@ -1,4 +1,3 @@
-showNotes()
 let addBtn=document.getElementById("addBtn");
 addBtn.addEventListener("click",function(e)
 {
@@ -30,14 +29,14 @@ function showNotes(){
         html +=`
         <div class="notecard my-2 mx-2 card" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Note ${index+1}</h5>
-          <p class="card-text">${element}</p>
-          <button id="${index}" onclick="Deletenote(this.id) "class="btn btn-primary">Delete Note</button>
+        <h5 class="card-title">Note ${index+1}</h5>
+        <p class="card-text">${element}</p>
+        <button id="${index}" onclick="Deletenote(this.id) "class="btn btn-primary">Delete Note</button>
         </div>
-      </div>`;
+        </div>`;
     });
     let notesEln =document.getElementById("notes");
-    if(notes.length != 0){
+    if(notesObj.length != 0){
         notesEln.innerHTML = html; 
     }
     else {
@@ -46,22 +45,22 @@ function showNotes(){
 } 
 
 function Deletenote(index){
- console.log("im deleting");
- let notes = localStorage.getItem("notes");
- if(notes ==null){
-     notesObj=[];
- } 
- else{
-     notesObj=JSON.parse(notes);
- }
- notesObj.splice(index,1);
- localStorage.setItem("notes",JSON.stringify(notesObj));
- showNotes();
+    console.log("im deleting");
+    let notes = localStorage.getItem("notes");
+    if(notes ==null){
+        notesObj=[];
+    } 
+    else{
+        notesObj=JSON.parse(notes);
+    }
+    notesObj.splice(index,1);
+    localStorage.setItem("notes",JSON.stringify(notesObj));
+    showNotes();
 }
 
 let search= document.getElementById('searchTxt');
 search.addEventListener("input",function(){
-
+    
     let inputval = search.value.toLowerCase();
     let notecards = document.getElementsByClassName('notecard');
     Array.from(notecards).forEach(function(element){
@@ -75,3 +74,5 @@ search.addEventListener("input",function(){
     })
 })
 
+
+showNotes();
