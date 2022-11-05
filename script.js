@@ -1,17 +1,29 @@
 let addBtn=document.getElementById("addBtn");
 addBtn.addEventListener("click",function(e)
-{
+{   let myobj={
+    title:'',
+    desc:'',
+    date:'',
+    }
+    d=new Date();
     let addTxt=document.getElementById("addTxt");
-    let notes=localStorage.getItem("notes");
+    let addTitle = document.getElementById("addTitle");
+    myobj.title = addTitle.value;
+    myobj.desc = addTxt.value;
+    myobj.date=`On ${d.toDateString()} at ${((d.getHours()>12)?(d.getHours()-12):d.getHours())}:${d.getMinutes()} ${(d.getHours()>12)?'PM':'AM'}`;
+    let notesObj;
+
+    let notes=localStorage.getItem("notes");//this gets the stored value from the local storage in stringified form & if nothing is available will return null
     if(notes == null){
         notesObj=[];
     }
     else{
         notesObj=JSON.parse(notes);
     }
-    (addTxt.value.length>4)? notesObj.push(addTxt.value):alert("Enter longer text");
+    notesObj.push(myobj);
     localStorage.setItem("notes",JSON.stringify(notesObj));
     addTxt.value ="";
+    addTitle.value="";
     console.log(notesObj);
     showNotes();
 })
@@ -30,8 +42,11 @@ function showNotes(){
         <div class="notecard my-2 mx-2 card" style="width: 18rem;">
         <div class="card-body">
         <h5 class="card-title">Note ${index+1}</h5>
-        <p class="card-text">${element}</p>
-        <button id="${index}" onclick="Deletenote(this.id) "class="btn btn-primary">Delete Note</button>
+        <h5 class="card-title">${element.title}</h5>
+        <p class="card-text">${element.desc}</p>
+        <p class="card-text">${element.date}</p>
+        <button id="${index}" onclick="Deletenote(this.id)" class="btn btn-primary">Delete Note</button>
+        <button id="${index}" onclick="Copy(this.id)" class="btn btn-primary">Copy Note</button>
         </div>
         </div>`;
     });
@@ -73,6 +88,11 @@ search.addEventListener("input",function(){
         }
     })
 })
+function Copy(index){
+    let selectedNote = JSON.parse(localStorage.getItem('notes'));
+    selectedNote = selectedNote[index];
+    navigator.clipboard.writeText(selectedNote.title + "\n" +selectedNote.desc);
 
+}
 
 showNotes();
